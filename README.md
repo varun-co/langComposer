@@ -7,7 +7,7 @@ python3 -m venv env
 source env/bin/activate
 ```
 ``` 
-pip install -r requirments.txt
+pip install -r requirements.txt
 ```
 ``` 
 mkdir <lang-name>
