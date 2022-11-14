@@ -8,6 +8,11 @@ from jiwer import cer
 if it does not exist mkdir <lang-name>
 cd <lang-name>
 touch letters.tsv
+Edit the letters.tsv file
+the rows (first ) should contain all the vowels
+the first ele must in the first row should be empty
+The first column must be the consonents
+And all the other compound letters should be in row in which the compound letter origninates and in column where the compound letter originates
 '''
 lettersDirectory = 'tamil'
 sourcefile = 'tamilFile.txt'
@@ -33,6 +38,21 @@ def init():
     consonentsWithoutDot = [i[0] for i in consonents]
     hashMap , reverseHashMap = generateMapAndReverseMap(letters,vowels,consonents)
     return vowels , consonentsWithoutDot , consonents , hashMap , reverseHashMap 
+def removeDots(lines):
+    lines = re.sub('்','',lines)
+    return lines
+def addDots(lines):
+    vowels, consonentsWithoutDot , _ , _ , _ = init()
+    res = ''
+    i = 0
+    while(i<len(lines)):
+        if lines[i] in consonentsWithoutDot:
+            res = res + lines[i]+ '்'
+        else:
+            res = res + lines[i]
+        i = i + 1
+    return res
+
 def decompose(lines):
     #keys = sorted(hashMap.keys(),reverse=True)
     lines = lines + ' '
@@ -67,8 +87,11 @@ def main():
     with open(sourcefile) as fhandle:
         lines = fhandle.read()
     temp = str(lines)
+    # parsing stage 
     lines = decompose(lines)
-    #print(lines)
+    lines = removeDots(lines)
+    # Decoding Stage
+    lines = addDots(lines)
     lines = recompose(lines)
     error = cer(lines,temp)
     print(error)
